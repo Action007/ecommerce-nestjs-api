@@ -3,26 +3,27 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 }
 
 model User {
-    id            String         @id @default(uuid())
-    firstName     String         @map("first_name")
-    lastName      String         @map("last_name")
-    email         String         @unique
-    password      String
-    profileImageUrl String?      @map("profile_image_url")
-    role          Role           @default(CUSTOMER)
-    deletedAt     DateTime?      @map("deleted_at")
-    createdAt     DateTime       @default(now()) @map("created_at")
-    updatedAt     DateTime       @updatedAt @map("updated_at")
-    refreshTokens RefreshToken[]
-    uploads       Upload[]
-    cart          Cart?
-    wishlist      Wishlist?
-    orders        Order[]
+    id              String         @id @default(uuid())
+    firstName       String         @map("first_name")
+    lastName        String         @map("last_name")
+    email           String         @unique
+    password        String
+    profileImageUrl String?        @map("profile_image_url")
+    role            Role           @default(CUSTOMER)
+    deletedAt       DateTime?      @map("deleted_at")
+    createdAt       DateTime       @default(now()) @map("created_at")
+    updatedAt       DateTime       @updatedAt @map("updated_at")
+    refreshTokens   RefreshToken[]
+    uploads         Upload[]
+    cart            Cart?
+    wishlist        Wishlist?
+    orders          Order[]
 
     @@map("users")
 }
@@ -44,10 +45,10 @@ model Product {
     createdAt     DateTime  @default(now()) @map("created_at")
     updatedAt     DateTime  @updatedAt @map("updated_at")
 
-    category   Category    @relation(fields: [categoryId], references: [id])
-    cartItems  CartItem[]
+    category      Category       @relation(fields: [categoryId], references: [id])
+    cartItems     CartItem[]
     wishlistItems WishlistItem[]
-    orderItems OrderItem[]
+    orderItems    OrderItem[]
 
     @@index([name])
     @@index([categoryId])
@@ -144,10 +145,10 @@ model OrderItem {
 }
 
 model Wishlist {
-    id        String         @id @default(uuid())
-    userId    String         @unique @map("user_id")
-    createdAt DateTime       @default(now()) @map("created_at")
-    updatedAt DateTime       @updatedAt @map("updated_at")
+    id        String   @id @default(uuid())
+    userId    String   @unique @map("user_id")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
 
     user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
     items WishlistItem[]
